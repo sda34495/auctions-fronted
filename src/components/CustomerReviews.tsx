@@ -27,21 +27,21 @@ const reviews = [
 
 const CustomerReviews = () => {
     return (
-        <section className="bg-white dark:bg-gray-900 py-8">
+        <section className="bg-[#F3F2ED] text-black py-8">
             <div className="max-w-screen-xl px-4 py-8 mx-auto">
-                <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-8 text-center">Happy Customers 😊</h2>
+                <h2 className="text-5xl font-extrabold tracking-tight text-gray-900 mt-4 mb-8 text-center">Happy Customers 😊</h2>
                 <div className="grid gap-8 lg:grid-cols-2">
                     {reviews.map((review, index) => (
                         <div key={index} className="p-6 bg-light-blue-500 rounded-lg shadow-md flex items-center space-x-4">
                             <img
                                 src={review.avatar}
                                 alt={review.name}
-                                className="w-16 h-16 rounded-full"
+                                className="w-16 h-16 rounded-full object-cover"
                             />
                             <div>
-                                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{review.name}</h3>
+                                <h3 className="text-xl font-semibold text-gray-900 ">{review.name}</h3>
                                 <p className="text-gray-600 dark:text-gray-400">{review.date}</p>
-                                <p className="mt-4 text-gray-900 dark:text-white">{review.review}</p>
+                                <p className="mt-4 text-gray-900 ">{review.review}</p>
                             </div>
                         </div>
                     ))}
