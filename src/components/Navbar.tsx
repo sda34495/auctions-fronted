@@ -28,7 +28,7 @@ const Navbar = () => {
             </div>
 
             <nav className="flex items-center space-x-4">
-                <Link to="/solutions" className="hidden md:block">
+                {/* <Link to="/solutions" className="hidden md:block">
                     Solutions
                 </Link>
                 <Link to="/pricing" className="hidden md:block">
@@ -36,7 +36,7 @@ const Navbar = () => {
                 </Link>
                 <Link to="/resources" className="hidden md:block">
                     Resources
-                </Link>
+                </Link> */}
                     {token ? (
                         <button
                             onClick={handleLogout}
