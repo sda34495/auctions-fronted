@@ -1,0 +1,22 @@
+.modal {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateY(-50px);
+    opacity: 0;
+}
+
+.modal--open {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+    transition: opacity 0.3s ease-in-out;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
