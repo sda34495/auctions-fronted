@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import { getData } from '../lib/axios';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
+import AnnouncementBanner from '../components/Announcement';
 
 const Auctions = () => {
     const [auctions, setAuctions] = useState([]);
@@ -44,6 +45,7 @@ const Auctions = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
+            <AnnouncementBanner message='An email will be sent after the auction ends. Stay tuned for the results!'/>
             <main className="flex-grow p-4">
                 <div className="flex justify-center mb-4">
                     <button
