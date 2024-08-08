@@ -2,12 +2,14 @@ import { useState } from 'react';
 import './modal.css';
 import { patchData } from '../../lib/axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const BidNowModal = ({ isOpen, onRequestClose, highestBid, auctionId, getAuctions }) => {
     const [bidAmount, setBidAmount] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
+    const { getIdTokenClaims } = useAuth0();
     const handleBidChange = (e) => {
         const value = e.target.value;
         setBidAmount(value);
@@ -24,7 +26,10 @@ const BidNowModal = ({ isOpen, onRequestClose, highestBid, auctionId, getAuction
 
             setIsLoading(true)
 
-            const response = await patchData(`/auction/${auctionId}/bid`, { amount: bidAmount })
+            const claims = await getIdTokenClaims()
+            if (!claims?.__raw) return;
+            const response = await
+                patchData(`/auction/${auctionId}/bid`, { amount: bidAmount }, claims?.__raw)
             if (response?.status != 200) {
                 return
             }
