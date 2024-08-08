@@ -1,43 +1,48 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import LoginButton from './LoginButton';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const Navbar = () => {
 
-    const { logout } = useAuth0();
-    const user = JSON.parse(localStorage.getItem('user') || "{}")
-    const token = JSON.parse(localStorage.getItem('token'))
+    const { logout, isAuthenticated, getIdTokenClaims } = useAuth0();
+    const [user, setUser] = useState({})
 
 
     const handleLogout = async () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
         await logout();
     };
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (isAuthenticated) {
+                try {
+                    const result = await getIdTokenClaims()
+                    setUser(result)
+                } catch (error) {
+                    console.error('Error fetching token:', error);
+                }
+            }
+        };
+
+        fetchData();
+    }, [isAuthenticated, getIdTokenClaims]);
+
     return (
         <header className=" bg-gradient-to-r from-[#6d3f77] to-[#f7c93b]  sticky top-0 z-50">
-        <div className="container mx-auto flex items-center justify-between p-3">
-            <div className="flex items-center space-x-2">
-                <img
-                    src="https://img.freepik.com/premium-photo/judges-hammer-vector-logo-illustration_712527-3703.jpg?w=826"
-                    alt="Logo"
-                    className="w-12 rounded-full"
-                />
-                <span className="text-black text-2xl font-bold">AuctionMania</span>
-            </div>
+            <div className="container mx-auto flex items-center justify-between p-3">
+                <div className="flex items-center space-x-2">
+                    <img
+                        src="https://img.freepik.com/premium-photo/judges-hammer-vector-logo-illustration_712527-3703.jpg?w=826"
+                        alt="Logo"
+                        className="w-12 rounded-full"
+                    />
+                    <span className="text-black text-2xl font-bold">AuctionMania</span>
+                </div>
 
-            <nav className="flex items-center space-x-4">
-                {/* <Link to="/solutions" className="hidden md:block">
-                    Solutions
-                </Link>
-                <Link to="/pricing" className="hidden md:block">
-                    Pricing
-                </Link>
-                <Link to="/resources" className="hidden md:block">
-                    Resources
-                </Link> */}
-                    {token ? (
+                <nav className="flex items-center space-x-4">
+
+                    {isAuthenticated ? (
                         <button
                             onClick={handleLogout}
                             className="rounded-lg   bg-black text-white px-6 py-1"

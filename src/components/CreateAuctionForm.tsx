@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { patchBase64Image, postData } from '../lib/axios';
 import { useNavigate } from 'react-router-dom';
 import Loader from './Loader';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const CreateAuctionForm = () => {
     const [title, setTitle] = useState('');
@@ -9,6 +10,7 @@ const CreateAuctionForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('')
     const navigate = useNavigate();
+    const { getIdTokenClaims } = useAuth0();
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -44,11 +46,14 @@ const CreateAuctionForm = () => {
         setIsLoading(true);
 
         try {
-            const response = await postData('/auction', { title: title });
+            const claims = await getIdTokenClaims()
+            const token = claims?.__raw
+            if (!token) return;
+            const response = await postData('/auction', { title: title }, token);
             if (response?.status !== 201) return;
             const auction = response.data;
 
-            const imageResponse = await patchBase64Image(`/auction/${auction.id}/picture`, imageBase64);
+            const imageResponse = await patchBase64Image(`/auction/${auction.id}/picture`, imageBase64, token);
             if (imageResponse?.status === 200) {
                 setIsLoading(false);
                 navigate('/auctions');

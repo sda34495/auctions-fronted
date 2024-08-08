@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { AuctionType } from '../types/auction';
 import BidNowModal from './modals/BidNow';
+import { useAuth0 } from '@auth0/auth0-react';
 
 enum BidStatus {
     own = 'OWN_AUCTION',
@@ -18,11 +19,10 @@ const AuctionItem = ({ auction, getAuctions }: Props) => {
     const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
     const [isModalOpen, setModalOpen] = useState(false);
     const [isAuctionEnded, setAuctionEnded] = useState(false);
-    const { title, pictureUrl, sellerDetails, endingAt, highestBid, id, bidderDetails } = auction;
+    const { title, pictureUrl, sellerDetails, endingAt, highestBid, id } = auction;
+    const { user } = useAuth0();
 
-    const userJson = localStorage.getItem('user');
-    if (!userJson) return null;
-    const user = JSON.parse(userJson);
+    if (!user) return;
     const auctionStatus =
         sellerDetails.email === user.email ? BidStatus.own :
             highestBid.bidder === user.email ? BidStatus.alreadyBidd : BidStatus.allowed;

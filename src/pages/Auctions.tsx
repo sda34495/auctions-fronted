@@ -6,12 +6,14 @@ import { getData } from '../lib/axios';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
 import AnnouncementBanner from '../components/Announcement';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Auctions = () => {
     const [auctions, setAuctions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { loginWithRedirect, getIdTokenClaims } = useAuth0();
 
     const handleClick = () => {
         navigate('/create-auction');
@@ -19,8 +21,14 @@ const Auctions = () => {
 
     const fetchAuctions = async () => {
         try {
-            const data = await getData('/auctions?status=OPEN');
-            setAuctions(data);
+            const claims = await getIdTokenClaims()
+            if (!claims) return;
+            const response = await getData('/auctions?status=OPEN', claims?.__raw);
+            if (response?.status == 401) {
+                loginWithRedirect()
+            }
+            setAuctions(response?.data);
+            console.log(auctions)
         } catch (err) {
             setError(err.message);
         } finally {
@@ -45,7 +53,7 @@ const Auctions = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            <AnnouncementBanner message='An email will be sent after the auction ends. Stay tuned for the results!'/>
+            <AnnouncementBanner message='An email will be sent after the auction ends. Stay tuned for the results!' />
             <main className="flex-grow p-4">
                 <div className="flex justify-center mb-4">
                     <button

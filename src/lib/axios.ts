@@ -7,29 +7,12 @@ const axiosInstance = axios.create({
   },
 });
 
-const getData = async (endpoint: string) => {
+const getData = async (endpoint: string, token: string) => {
   try {
-    const token = localStorage.getItem("token");
     if (!token) return;
     const response = await axiosInstance.get(endpoint, {
       headers: {
-        Authorization: `Bearer ` + JSON.parse(token),
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const postData = async (endpoint: string, data: object) => {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    const response = await axiosInstance.post(endpoint, data, {
-      headers: {
-        Authorization: `Bearer ` + JSON.parse(token),
+        Authorization: `Bearer ` + token,
       },
     });
 
@@ -38,13 +21,27 @@ const postData = async (endpoint: string, data: object) => {
     console.log(error);
   }
 };
-const patchBase64Image = async (endpoint: string, data) => {
-  const token = localStorage.getItem("token");
+
+const postData = async (endpoint: string, data: object, token: string) => {
+  try {
+    if (!token) return;
+    const response = await axiosInstance.post(endpoint, data, {
+      headers: {
+        Authorization: `Bearer ` + token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+const patchBase64Image = async (endpoint: string, data, token: string) => {
   if (!token) return;
   try {
     const response = await axiosInstance.patch(endpoint, data, {
       headers: {
-        Authorization: `Bearer ` + JSON.parse(token),
+        Authorization: `Bearer ` + token,
         "Content-Type": "text/plain",
       },
     });

@@ -1,10 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
 
 const PrivateRoute = ({ children }) => {
-    const { loginWithRedirect } = useAuth0();
-    const token = localStorage.getItem('token')
+    const { isAuthenticated, loginWithRedirect } = useAuth0();
 
-    if (!token) {
+    if (!isAuthenticated) {
         loginWithRedirect();
     }
 

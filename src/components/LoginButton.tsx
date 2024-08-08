@@ -9,12 +9,7 @@ const LoginButton = ({ className, text }: { className: string, text: string }) =
     useEffect(() => {
         const getToken = async () => {
             try {
-                if (isAuthenticated && !localStorage.getItem('token')) {
-                    const idTokenClaims = await getIdTokenClaims();
-                    const idToken = idTokenClaims?.__raw; // The ID token is in the __raw property
-                    if (!idToken) return;
-                    localStorage.setItem('token', JSON.stringify(idToken));
-                    localStorage.setItem('user', JSON.stringify(user));
+                if (isAuthenticated) {
                     navigate('/auctions')
                 }
             } catch (error) {

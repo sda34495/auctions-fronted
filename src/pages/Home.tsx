@@ -1,6 +1,5 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import Welcome from '../components/Welcome';
 import Features from '../components/Features';
 import AboutUs from '../components/AboutUs';
 import CustomerReviews from '../components/CustomerReviews';
@@ -10,14 +9,17 @@ import { useNavigate } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
 
+
 const Home = () => {
     const { isAuthenticated } = useAuth0();
+
     const navigate = useNavigate()
     useEffect(() => {
 
         if (isAuthenticated) {
             navigate('/auctions')
         }
+
     }, [isAuthenticated])
 
     return (
@@ -25,7 +27,7 @@ const Home = () => {
             <Navbar />
             <main className="flex-grow">
                 <Hero />
-                <Categories/>
+                <Categories />
                 {/* <Welcome /> */}
                 <Features />
                 <AboutUs />
